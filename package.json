@@ -1,0 +1,26 @@
+{
+  "name": "th-qr-payment",
+  "version": "1.0.0",
+  "description": "QR Payment in Thailand",
+  "keywords": [
+    "qr",
+    "payment",
+    "thailand",
+    "financial"
+  ],
+  "homepage": "https://github.com/thammarongg/th-qr-payment#readme",
+  "bugs": {
+    "url": "https://github.com/thammarongg/th-qr-payment/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thammarongg/th-qr-payment.git"
+  },
+  "license": "MIT",
+  "author": "Thammarong Glomjai <thammrong@gmail.com>",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../base
+namespace: invader-prod
+commonLabels:
+  env: prod
+namePrefix: ivd-prod-
+images:
+  - name: invader-backtesting
+    newName: 338460195757.dkr.ecr.ap-southeast-1.amazonaws.com/invader-backtesting
+    newTag: latest
