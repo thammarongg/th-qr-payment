@@ -28,10 +28,13 @@ spec:
                       - nodes-wow-general-apse-1a
       containers:
         - name: invader-backtesting
-          image: 182399701919.dkr.ecr.ap-southeast-1.amazonaws.com/invader-backtesting:latest
+          image: 338460195757.dkr.ecr.ap-southeast-1.amazonaws.com/invader-backtesting:latest
+          envFrom:
+          - secretRef:
+              name: invader-backtesting-secret-latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 3000
+            - containerPort: 8504
               protocol: TCP
           resources: 
             requests:
@@ -44,7 +47,7 @@ spec:
             failureThreshold: 5
             httpGet:
               path: /
-              port: 3000
+              port: 8504
             initialDelaySeconds: 60
             periodSeconds: 60
             timeoutSeconds: 120

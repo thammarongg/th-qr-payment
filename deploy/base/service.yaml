@@ -8,8 +8,8 @@ spec:
   type: NodePort
   ports:
     - name: app-port
-      port: 3000
-      targetPort: 3000
+      port: 8504
+      targetPort: 8504
       protocol: TCP
   selector:
     app.name: invader-backtesting
