@@ -24,8 +24,7 @@ spec:
                   - key: kops.k8s.io/instancegroup
                     operator: In
                     values:
-                      - nodes-ap-southeast-1a
-                      - nodes-wow-general-apse-1a
+                      - nodes-wow-invader-arm64-apse-1a
       containers:
         - name: invader-backtesting
           image: 338460195757.dkr.ecr.ap-southeast-1.amazonaws.com/invader-backtesting:latest
@@ -38,11 +37,11 @@ spec:
               protocol: TCP
           resources: 
             requests:
-              cpu: 50m
-              memory: 128Mi
-            limits:
               cpu: 500m
               memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 8192Mi
           livenessProbe:
             failureThreshold: 5
             httpGet:
