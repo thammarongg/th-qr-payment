@@ -6,19 +6,22 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_REGION: ap-southeast-1                   # AWS Singapore region
-  ECR_REPOSITORY: invader-backtesting     # Your specified ECR repository name
-  KUSTOMIZE_PATH: ./deploy/prod/kustomization.yaml # Path to your kustomization file
+  AWS_REGION: ap-southeast-1
+  ECR_REPOSITORY: invader-backtesting
+  KUSTOMIZE_PATH: ./deploy/prod/kustomization.yaml
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: write   # Needed for pushing changes to the repository
+      contents: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -43,22 +46,20 @@ jobs:
           echo "ECR_REPOSITORY_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}" >> $GITHUB_ENV
           echo "ecr-repository-uri=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}" >> $GITHUB_OUTPUT
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image (multi-arch)
         uses: docker/build-push-action@v4
         with:
           context: .
+          platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          tags: ${{ env.ECR_REPOSITORY_URI }}:${{ env.IMAGE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Update Kustomization with new image tag
         run: |
-          # Install kustomize
           curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
           sudo mv kustomize /usr/local/bin/
-          
-          # Update image tag in kustomization.yaml
           cd $(dirname "${{ env.KUSTOMIZE_PATH }}")
           kustomize edit set image 338460195757.dkr.ecr.ap-southeast-1.amazonaws.com/invader-backtesting=${{ env.ECR_REPOSITORY_URI }}:${{ env.IMAGE_TAG }}
 
